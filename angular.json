@@ -62,7 +62,6 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "aot": true,
-              "baseHref": "https://nimrod13.github.io/Heroes/",
               "budgets": [
                 {
                   "type": "initial",
