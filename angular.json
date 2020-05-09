@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Heroes": {
+    "heroes": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -136,14 +136,6 @@
             }
           }
         },
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {
-            "baseHref": "https://nimrod13.github.io/Heroes/",
-            "name": "Heroes",
-            "email": "ale_xia13@yahoo.com"
-          }
-        }
       }
     }
   },
