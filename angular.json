@@ -26,12 +26,12 @@
               {
                 "glob": "metadata.json",
                 "input": "node_modules/@dynatrace/barista-icons",
-                "output": "/assets/icons"
+                "output": "assets/icons"
               },
               {
                 "glob": "*.svg",
                 "input": "node_modules/@dynatrace/barista-icons",
-                "output": "/assets/icons"
+                "output": "assets/icons"
               },
               {
                 "glob": "**/*",
