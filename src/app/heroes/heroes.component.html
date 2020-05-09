@@ -1,0 +1,10 @@
+<div class="heroes_container">
+  <h2>Heroes</h2>
+  <div #heroesContainer>
+    <app-dynamic-table></app-dynamic-table>
+    <div *ngIf="!heroService.tryGetHeroes()">
+      <app-loading></app-loading>
+    </div>
+  </div>
+  <app-scrolling [container]="heroesContainer"></app-scrolling>
+</div>

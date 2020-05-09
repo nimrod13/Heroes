@@ -1,0 +1,12 @@
+<header>
+  <h1>{{title | uppercase}}</h1>
+</header>
+<div class="container">
+  <nav>
+    <button type="button" class="button-item" routerLink="/dashboard" routerLinkActive="active">Dashboard</button>
+    <button type="button" class="button-item" routerLink="/heroes" routerLinkActive="active">Heroes</button>
+  </nav>
+  <router-outlet></router-outlet>
+  <app-messages></app-messages>
+  <app-attribution></app-attribution>
+</div>
