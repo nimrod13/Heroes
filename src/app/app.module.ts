@@ -45,7 +45,7 @@ import { ScrollingComponent } from './scrolling/scrolling.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DtIconModule.forRoot({ svgIconLocation: '/assets/icons/{{name}}.svg' }),
+    DtIconModule.forRoot({ svgIconLocation: 'assets/icons/{{name}}.svg' }),
     DtButtonModule,
     DtFormFieldModule,
     DtInputModule,
