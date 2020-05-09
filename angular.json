@@ -135,7 +135,7 @@
               "devServerTarget": "Heroes:serve:production"
             }
           }
-        },
+        }
       }
     }
   },
