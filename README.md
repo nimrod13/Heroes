@@ -1,5 +1,5 @@
-# MarvelHeroes
- Marvel API Heroes
+# Heroes
+ Heroes based on Marvel API and Angular Tour of Heroes tutorial
 
  This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
