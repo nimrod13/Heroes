@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Hero } from '../hero';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-
+import { DtToast } from '@dynatrace/barista-components/toast';
 import { HeroService } from '../hero.service';
 
 @Component({
@@ -12,12 +12,13 @@ import { HeroService } from '../hero.service';
 })
 
 export class HeroDetailComponent implements OnInit {
-  @Input() hero: Hero;
+  hero: Hero;
 
   constructor(
     private route: ActivatedRoute,
     private heroService: HeroService,
     private location: Location,
+    private toast: DtToast
   ) { }
 
   ngOnInit() {
@@ -31,7 +32,7 @@ export class HeroDetailComponent implements OnInit {
     const heroes = this.heroService.tryGetHeroes();
 
     if (heroes) {
-      this.hero = heroes.find(h => h.id === id);
+      this.hero = JSON.parse(JSON.stringify(heroes.find(h => h.id === id)));
       this.trySetNickname();
       return;
     }
@@ -57,9 +58,39 @@ export class HeroDetailComponent implements OnInit {
   }
 
   save(): void {
-    // this.heroService.updateLocalHero(this.hero);
-    this.heroService.updateHero(this.hero).subscribe(() => this.heroService.updateHeroName(this.hero));
+    this.heroService.updateHero(this.hero).subscribe(() =>
+      this.updateHeroName(this.hero));
     // .subscribe(() => this.goBack());
+  }
+
+
+  public updateHeroName(hero: Hero) {
+    const heroesList = this.heroService.tryGetHeroes();
+    if (!heroesList) {
+      this.heroService.getHeroes().subscribe((heroes: Hero[]) => {
+        this.updateHeroNickname(hero, heroes);
+      });
+    } else {
+      this.updateHeroNickname(hero, heroesList);
+    }
+  }
+
+  private updateHeroNickname(hero: Hero, heroes: Hero[]): void {
+    const heroCurrent = heroes.find(h => h.id === hero.id);
+
+    if (!heroCurrent) {
+      this.toast.create('This name cannot be changed!');
+      return;
+    }
+
+    if (heroCurrent.nickname === hero.nickname) {
+      this.toast.create('You have not made any changes!');
+      return;
+    }
+
+    heroCurrent.nickname = hero.nickname; // only first found item is changed;
+    this.heroService.onHeroesChanged();
+    this.toast.create('Your changes have been saved!');
   }
 
   getImageSrc() {

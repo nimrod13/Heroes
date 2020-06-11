@@ -40,8 +40,7 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
     if (!heroesList) {
       this.heroService.getHeroes().subscribe(h => this.onGetHeroes(h));
     } else {
-      this.cleanUpHeroFields(heroesList);
-      this.initTable(heroesList);
+      this.onGetHeroes(heroesList);
     }
   }
 
@@ -75,8 +74,6 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   updateDataSource(heroes: Hero[], goToEnd: boolean = false): void {
-    this.cleanUpHeroFields(heroes);
-
     if (this.data && heroes.length > this.data.length) {
       goToEnd = true;
     }
@@ -92,10 +89,6 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
     this.paginationChanges();
   }
 
-  private cleanUpHeroFields(heroes: any): void {
-    // heroes = heroes.map(({ stories, description, comics, series, events, modified, urls, thumbnail, ...item }) => item);
-  }
-
   initTable(heroes: any): void {
     this.data = heroes;
     this.dataSource = new DtTableDataSource(heroes);
@@ -106,7 +99,7 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private onGetHeroes(heroes: Hero[]): void {
-    heroes.map(h => h.nickname = h.name);
+    heroes.map(h => h.nickname = h.nickname || h.name);
     this.initTable(heroes);
   }
 
@@ -145,6 +138,6 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription.unsubscribe(); // we need to get notified of changes from the detail page
   }
 }

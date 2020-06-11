@@ -4,16 +4,15 @@ import { Observable, of, Subject } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import { DtToast } from '@dynatrace/barista-components/toast';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class HeroService {
-  private heroes: Hero[] = [];
-  private readonly dbUrl = 'https://marvel-e1c17.firebaseio.com/heroes.json';
-  private readonly dbUrlBase = 'https://marvel-e1c17.firebaseio.com';
+  protected heroes: Hero[] = [];
+  protected readonly dbUrl = 'https://marvel-e1c17.firebaseio.com/heroes.json';
+  protected readonly dbUrlBase = 'https://marvel-e1c17.firebaseio.com';
   heroesChanged = new Subject<Hero[]>();
   public lastHeroesIndex: number;
 
@@ -22,9 +21,9 @@ export class HeroService {
   };
 
   constructor(
-    private http: HttpClient,
-    private messageService: MessageService,
-    private toast: DtToast) { }
+    protected http: HttpClient,
+    protected messageService: MessageService
+  ) { }
 
   setHeroes(heroes: Hero[]) {
     this.heroes = heroes.filter(h => h != null); // due to empty nodes when a hero is deleted in firebase DB
@@ -81,7 +80,7 @@ export class HeroService {
   }
 
   /** Log a HeroService message with the MessageService */
-  private log(message: string) {
+  protected log(message: string) {
     this.messageService.add(`HeroService: ${message}`);
   }
 
@@ -125,29 +124,6 @@ export class HeroService {
 
   //   this.updateHeroName(hero, heroesLocal);
   // }
-
-  public updateHeroName(hero: Hero) {
-    const heroCurrent = this.heroes.find(h => h.id === hero.id);
-
-    if (!heroCurrent) {
-      this.toast.create('This name cannot be changed!');
-      return;
-    }
-
-    if (heroCurrent.nickname === hero.nickname) {
-      this.toast.create('You have not made any changes!');
-      return;
-    }
-
-    heroCurrent.nickname = hero.nickname; // only first found item is changed;
-    this.onHeroesChanged();
-    this.toast.create('Your changes have been saved!');
-    // this.heroes.forEach((element, index) => {  //to change all names
-    //   if (element.name === hero.name) {
-    //     this.heroes[index].name = hero.name;
-    //   }
-    // });
-  }
 
   addHero(hero: Hero): Observable<Hero> {
     const url = `${this.dbUrlBase}/heroes/${this.lastHeroesIndex + 1}.json`;
