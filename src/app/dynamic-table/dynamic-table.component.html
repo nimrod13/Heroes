@@ -32,7 +32,7 @@
       <ng-container dtColumnDef="delete">
         <dt-header-cell *dtHeaderCellDef></dt-header-cell>
         <dt-cell *dtCellDef="let row" style="cursor: initial;">
-          <span class="trash" (click)="deleteHero(row.id)">
+          <span class="trash" (click)="deleteHero(row.id, row)">
             <span></span>
             <i></i>
           </span>
@@ -40,7 +40,7 @@
       </ng-container>
 
       <dt-header-row *dtHeaderRowDef="['id', 'name', 'nickname','delete']"></dt-header-row>
-      <dt-row *dtRowDef="let row; columns: ['id', 'name', 'nickname', 'delete']"></dt-row>
+      <dt-row [@table]="row.isDeleted ? 'hide' : null" *dtRowDef="let row; columns: ['id', 'name', 'nickname', 'delete']"></dt-row>
     </dt-table>
     <dt-pagination #pagination></dt-pagination>
   </ng-container>

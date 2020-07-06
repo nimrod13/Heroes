@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DtToast } from '@dynatrace/barista-components/toast';
 import { HeroService } from '../hero.service';
+import { switchMap, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hero-detail',
@@ -58,25 +59,13 @@ export class HeroDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.heroService.updateHero(this.hero).subscribe(() =>
-      this.updateHeroName(this.hero));
-    // .subscribe(() => this.goBack());
+    this.heroService.getHeroIndex(this.hero.id).pipe(switchMap((id: number) =>
+      this.heroService.updateHero(this.hero, id))
+    ).subscribe(() => this.updateHeroNickname(this.hero));
   }
 
-
-  public updateHeroName(hero: Hero) {
-    const heroesList = this.heroService.tryGetHeroes();
-    if (!heroesList) {
-      this.heroService.getHeroes().subscribe((heroes: Hero[]) => {
-        this.updateHeroNickname(hero, heroes);
-      });
-    } else {
-      this.updateHeroNickname(hero, heroesList);
-    }
-  }
-
-  private updateHeroNickname(hero: Hero, heroes: Hero[]): void {
-    const heroCurrent = heroes.find(h => h.id === hero.id);
+  private updateHeroNickname(hero: Hero): void {
+    const heroCurrent = this.heroService.tryGetHeroes().find(h => h.id === hero.id);
 
     if (!heroCurrent) {
       this.toast.create('This name cannot be changed!');

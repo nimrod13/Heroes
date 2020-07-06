@@ -12,11 +12,5 @@ export class HeroesComponent implements OnInit {
 
   constructor(public heroService: HeroService) { }
 
-  ngOnInit() {
-    // if (!this.heroService.tryGetHeroes()) {
-    //   this.heroService.getHeroes().subscribe(heroes => {
-    //     heroes.map(h => h ? h.nickname = h.name : null);
-    //   });
-    // }
-  }
+  ngOnInit() { }
 }

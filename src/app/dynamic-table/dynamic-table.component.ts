@@ -6,11 +6,46 @@ import { HeroService } from '../hero.service';
 import { Hero } from '../hero';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { trigger, state, style, transition, animate, group, keyframes } from '@angular/animations';
 
 @Component({
   selector: 'app-dynamic-table',
   templateUrl: './dynamic-table.component.html',
-  styleUrls: ['./dynamic-table.component.css']
+  styleUrls: ['./dynamic-table.component.css'],
+  animations: [
+    trigger('table', [
+      state('enter', style({
+        transform: 'translateX(0)'
+      })),
+      state('hide', style({
+        transform: 'translateX(-100px)'
+      })),
+      transition('* => hide', [
+        animate(1200, keyframes([
+          style({
+            transform: 'translateX(0px)',
+            opacity: 1,
+            offset: 0
+          }),
+          style({
+            transform: 'translateX(-20px)',
+            opacity: 1,
+            offset: 0.3
+          }),
+          style({
+            transform: 'translateX(-50px)',
+            opacity: 0.5,
+            offset: 0.7
+          }),
+          style({
+            transform: 'translateX(-100px)',
+            opacity: 0,
+            offset: 1
+          })
+        ]))
+      ]),
+    ]),
+  ]
 })
 
 export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
@@ -31,6 +66,7 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }>;
 
   subscription: Subscription;
+  addHeroSubscription: Subscription;
   searchValue = '';
 
   constructor(private heroService: HeroService, private router: Router) { }
@@ -65,7 +101,7 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
     };
 
     heroesLocal.push(newHero);
-    this.heroService.addHero(newHero).subscribe(
+    this.addHeroSubscription = this.heroService.addHero(newHero).subscribe(
       () => {
         this.heroService.setHeroes(heroesLocal);
         this.heroService.lastHeroesIndex++;
@@ -124,10 +160,10 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  deleteHero(id: number): void {
+  deleteHero(id: number, row: any): void {
+    row.isDeleted = true;
     let heroesLocal = this.data || this.heroService.tryGetHeroes();
     this.heroService.getHeroIndex(id).subscribe((index: number) => {
-      // const heroIndex = heroesLocal.indexOf(hero);
       heroesLocal = heroesLocal.filter((h: Hero) => h.id !== id);
       this.heroService.deleteHero(index).subscribe(() => this.heroService.setHeroes(heroesLocal));
     });
@@ -139,5 +175,6 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe(); // we need to get notified of changes from the detail page
+    this.addHeroSubscription && this.addHeroSubscription.unsubscribe();
   }
 }

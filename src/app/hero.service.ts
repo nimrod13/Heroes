@@ -105,25 +105,13 @@ export class HeroService {
   }
 
   /** PUT: update the hero on the server */
-  updateHero(hero: Hero): Observable<any> {
-    const url = `${this.dbUrlBase}/heroes/${this.heroes.indexOf(hero)}.json`;
+  updateHero(hero: Hero, index: number): Observable<any> {
+    const url = `${this.dbUrlBase}/heroes/${index}.json`;
     return this.http.put(url, hero, this.httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${hero.id}`)),
+      tap(_ => this.log(`updated hero id=${hero.id} and index=${index}`)),
       catchError(this.handleError<any>('updateHero'))
     );
   }
-
-  // updateLocalHero(hero: Hero): void {
-  //   const heroesLocal: Hero[] = this.tryGetHeroes();
-  //   if (!heroesLocal) {
-  //     this.getHeroes().subscribe(heroes => {
-  //       this.updateHeroName(hero, heroes);
-  //     });
-  //     return;
-  //   }
-
-  //   this.updateHeroName(hero, heroesLocal);
-  // }
 
   addHero(hero: Hero): Observable<Hero> {
     const url = `${this.dbUrlBase}/heroes/${this.lastHeroesIndex + 1}.json`;
@@ -158,7 +146,7 @@ export class HeroService {
 
   searchLocalHeroes(term: string): Observable<Hero[]> {
     if (!term || term.length < 2) {
-      // if not search term, return empty hero array.
+      // if no search term, return empty hero array.
       return of([]);
     }
 
