@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1591894141407,
+  "timestamp": 1594047451934,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -19,11 +19,14 @@
         "/manifest.webmanifest",
         "/polyfills-es2015.f2c5ab749249a66bdf26.js",
         "/polyfills-es5.049f620af8c864cf4d88.js",
-        "/runtime-es2015.58f38629096e4e4053c6.js",
-        "/runtime-es5.58f38629096e4e4053c6.js",
+        "/runtime-es2015.d2a6e8fb89e0627faa26.js",
+        "/runtime-es5.d2a6e8fb89e0627faa26.js",
         "/styles.6e891c10765710c010a4.css"
       ],
-      "patterns": []
+      "patterns": [
+        "https:\\/\\/fonts\\.googleapis\\.com\\/css\\?family=Open\\+Sans:400,600,300",
+        "https:\\/\\/fonts\\.gstatic\\.com\\/.*"
+      ]
     },
     {
       "name": "assets",
@@ -411,7 +414,20 @@
       "patterns": []
     }
   ],
-  "dataGroups": [],
+  "dataGroups": [
+    {
+      "name": "heroes",
+      "patterns": [
+        "https:\\/\\/marvel-e1c17\\.firebaseio\\.com\\/.*",
+        "https:\\/\\/i\\.annihil\\.us\\/u\\/prod\\/marvel\\/i\\/mg\\/b\\/40\\/image_not_available\\/landscape_xlarge\\.jpg"
+      ],
+      "strategy": "performance",
+      "maxSize": 5,
+      "maxAge": 21600000,
+      "timeoutMs": 10000,
+      "version": 1
+    }
+  ],
   "hashTable": {
     "/5-es2015.ba884f7d26bfae862f75.js": "c63c1f1eb7469d30d0aaaf52f194031f812fb372",
     "/5-es5.ba884f7d26bfae862f75.js": "fe16bca6a602f302e6538f4fddfc6b8bf51554a1",
@@ -795,14 +811,14 @@
     "/assets/icons/zoomin-found.svg": "4e5b1e5021ea09af1833619ef9cc8e5a6f735777",
     "/assets/icons/zoomout-notfound.svg": "81a35320ec3ccc78bd82b96eb630cc83d8b241b9",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/index.html": "175f7031c58e43edcff2ecb6954eb82e03dac028",
+    "/index.html": "c7558868d0793858283648d8a54f5bb3f636b99e",
     "/main-es2015.f173ae1a9de38c73be49.js": "a1efb04804a3600594bda602ea4d51f16dee20fe",
     "/main-es5.f173ae1a9de38c73be49.js": "d15504de91a7cc4f40bc12f1640a5a85a7406857",
     "/manifest.webmanifest": "4d8dafef1e45d2278e999f4bd42d4de8f1c8a016",
     "/polyfills-es2015.f2c5ab749249a66bdf26.js": "72ad4ccc0a3916ae4598199447cdeadd6d380570",
     "/polyfills-es5.049f620af8c864cf4d88.js": "8aa26ea87b9958c6bd13b7c257c0e9940438e684",
-    "/runtime-es2015.58f38629096e4e4053c6.js": "a5a8b4094ac2da232ecb995532957d935bb6851c",
-    "/runtime-es5.58f38629096e4e4053c6.js": "b8d585479bd6660bc439f101e729a3cb22cddc32",
+    "/runtime-es2015.d2a6e8fb89e0627faa26.js": "60532b95e50641a143276412c8acff862df40587",
+    "/runtime-es5.d2a6e8fb89e0627faa26.js": "71f59a47e377c8e110f617c1c52ba53a792d874f",
     "/styles.6e891c10765710c010a4.css": "d8cfd8cedc88199d53f1c2833e46bdc78a6f20c0"
   },
   "navigationUrls": [
