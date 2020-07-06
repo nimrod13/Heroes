@@ -1,7 +1,7 @@
   <form #f="ngForm" (ngSubmit)="f.valid && f.resetForm()">
     <div class="flex">
-      <input type="text" name="heroName" class="hero_input" [class.empty]="!heroName.value.trim().length"
-        minlength="1" dtInput placeholder="Please enter hero name" #heroName required ngModel />
+      <input type="text" name="heroName" class="hero_input" [class.empty]="!heroName.value.trim().length" minlength="1"
+        dtInput placeholder="Please enter hero name" #heroName required ngModel />
       <button type="submit" class="inline-flex button-item" (click)="add(heroName.value)">
         <span class="add-icon">
           <dt-icon name="plus-add"></dt-icon>
@@ -40,7 +40,8 @@
       </ng-container>
 
       <dt-header-row *dtHeaderRowDef="['id', 'name', 'nickname','delete']"></dt-header-row>
-      <dt-row [@table]="row.isDeleted ? 'hide' : null" *dtRowDef="let row; columns: ['id', 'name', 'nickname', 'delete']"></dt-row>
+      <dt-row [@table]="row.isDeleted ? 'hide' : null"
+        *dtRowDef="let row; columns: ['id', 'name', 'nickname', 'delete']"></dt-row>
     </dt-table>
     <dt-pagination #pagination></dt-pagination>
   </ng-container>

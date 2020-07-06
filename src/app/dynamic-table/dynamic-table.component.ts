@@ -18,27 +18,32 @@ import { trigger, state, style, transition, animate, group, keyframes } from '@a
         transform: 'translateX(0)'
       })),
       state('hide', style({
-        transform: 'translateX(-100px)'
+        transform: 'translateX(100px)'
       })),
       transition('* => hide', [
-        animate(1200, keyframes([
+        animate(1400, keyframes([
           style({
             transform: 'translateX(0px)',
             opacity: 1,
             offset: 0
           }),
           style({
-            transform: 'translateX(-20px)',
-            opacity: 1,
+            transform: 'translateX(20px)',
+            opacity: 0.9,
             offset: 0.3
           }),
           style({
-            transform: 'translateX(-50px)',
+            transform: 'translateX(35px)',
+            opacity: 0.7,
+            offset: 0.5
+          }),
+          style({
+            transform: 'translateX(50px)',
             opacity: 0.5,
             offset: 0.7
           }),
           style({
-            transform: 'translateX(-100px)',
+            transform: 'translateX(100px)',
             opacity: 0,
             offset: 1
           })
@@ -66,17 +71,16 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
   }>;
 
   subscription: Subscription;
-  addHeroSubscription: Subscription;
   searchValue = '';
 
   constructor(private heroService: HeroService, private router: Router) { }
 
   ngOnInit(): void {
-    const heroesList: Hero[] = this.heroService.tryGetHeroes();
-    if (!heroesList) {
+    const heroesLocal: Hero[] = this.heroService.tryGetHeroes();
+    if (!heroesLocal) {
       this.heroService.getHeroes().subscribe(h => this.onGetHeroes(h));
     } else {
-      this.onGetHeroes(heroesList);
+      this.onGetHeroes(heroesLocal);
     }
   }
 
@@ -88,28 +92,20 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     const heroesLocal: Hero[] = this.heroService.tryGetHeroes();
-    if (!heroesLocal) {
-      return;
-    }
-
-    const newId = Math.max.apply(null, heroesLocal.map(h => h.id)) + 1;
-
+    const maxId = Math.max.apply(null, heroesLocal.map(h => h.id));
     const newHero: Hero = {
-      name, id: newId, series: {}, stories: {}, nickname: name,
+      name, id: maxId + 1, series: {}, stories: {}, nickname: name,
       description: '', modified: new Date().toString(), resourceURI: '', comics: {}, events: {}, urls: [],
       thumbnail: { path: 'https://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available', extension: 'jpg' }
     };
 
     heroesLocal.push(newHero);
-    this.addHeroSubscription = this.heroService.addHero(newHero).subscribe(
-      () => {
-        this.heroService.setHeroes(heroesLocal);
-        this.heroService.lastHeroesIndex++;
-      });
+    this.heroService.addHero(newHero).subscribe(() => this.heroService.setHeroes(heroesLocal));
     // this.scrollToBottom();
   }
 
-  updateDataSource(heroes: Hero[], goToEnd: boolean = false): void {
+  updateDataSource(heroes: Hero[]): void {
+    let goToEnd: boolean;
     if (this.data && heroes.length > this.data.length) {
       goToEnd = true;
     }
@@ -175,6 +171,5 @@ export class DynamicTableComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe(); // we need to get notified of changes from the detail page
-    this.addHeroSubscription && this.addHeroSubscription.unsubscribe();
   }
 }

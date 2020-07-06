@@ -10,22 +10,31 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 
 export class HeroService {
-  protected heroes: Hero[] = [];
-  protected readonly dbUrl = 'https://marvel-e1c17.firebaseio.com/heroes.json';
-  protected readonly dbUrlBase = 'https://marvel-e1c17.firebaseio.com';
-  heroesChanged = new Subject<Hero[]>();
-  public lastHeroesIndex: number;
-
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
   constructor(
     protected http: HttpClient,
     protected messageService: MessageService
   ) { }
 
+  protected heroes: Hero[] = [];
+  protected readonly dbUrl = 'https://marvel-e1c17.firebaseio.com/heroes.json';
+  protected readonly dbUrlBase = 'https://marvel-e1c17.firebaseio.com';
+  private maxHeroesIndex: number;
+  heroesChanged = new Subject<Hero[]>();
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  private getMaxHeroesIndex(heroes: Hero[]): number {
+    return Math.max.apply(null, Object.keys(heroes));
+  }
+
+  public setMaxHeroesIndex(heroes: Hero[]) {
+    this.maxHeroesIndex = this.getMaxHeroesIndex(heroes);
+  }
+
   setHeroes(heroes: Hero[]) {
+    this.setMaxHeroesIndex(heroes);
     this.heroes = heroes.filter(h => h != null); // due to empty nodes when a hero is deleted in firebase DB
     this.onHeroesChanged();
   }
@@ -50,7 +59,7 @@ export class HeroService {
         tap(_ => this.log('fetched heroes')),
         map(heroes => {
           this.heroes = Object.values(heroes).filter(h => h != null) as Hero[];
-          this.lastHeroesIndex = heroes.length;
+          this.setMaxHeroesIndex(this.heroes);
           return this.heroes;
         }),
         catchError(this.handleError<Hero[]>('getHeroes', []))
@@ -114,12 +123,18 @@ export class HeroService {
   }
 
   addHero(hero: Hero): Observable<Hero> {
-    const url = `${this.dbUrlBase}/heroes/${this.lastHeroesIndex + 1}.json`;
+    const url = `${this.dbUrlBase}/heroes/${this.maxHeroesIndex + 1}.json`;
     return this.http.put<Hero>(url, hero, this.httpOptions).pipe(
       tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
       catchError(this.handleError<Hero>('addHero'))
     );
   }
+
+  // saveHeroes(heroes: Hero[]): Observable<Hero[]> {
+  //   return this.http.put<Hero[]>(this.dbUrl, heroes, this.httpOptions).pipe(
+  //     catchError(this.handleError<Hero[]>('saveHeroes'))
+  //   );
+  // }
 
   deleteHero(index: number): Observable<Hero> {
     const url = `${this.dbUrlBase}/heroes/${index}.json`;
