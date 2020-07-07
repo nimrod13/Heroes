@@ -117,7 +117,7 @@ export class HeroService {
   updateHero(hero: Hero, index: number): Observable<any> {
     const url = `${this.dbUrlBase}/heroes/${index}.json`;
     return this.http.put(url, hero, this.httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${hero.id} and index=${index}`)),
+      tap(_ => this.log(`updating hero id=${hero.id} and index=${index}`)),
       catchError(this.handleError<any>('updateHero'))
     );
   }

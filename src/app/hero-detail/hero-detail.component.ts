@@ -61,23 +61,23 @@ export class HeroDetailComponent implements OnInit {
   save(): void {
     this.heroService.getHeroIndex(this.hero.id).pipe(switchMap((id: number) =>
       this.heroService.updateHero(this.hero, id))
-    ).subscribe(() => this.updateHeroNickname(this.hero));
+    ).subscribe(() => this.updateHeroNickname());
   }
 
-  private updateHeroNickname(hero: Hero): void {
-    const heroCurrent = this.heroService.tryGetHeroes().find(h => h.id === hero.id);
+  private updateHeroNickname(): void {
+    const heroCurrent = this.heroService.tryGetHeroes().find(h => h.id === this.hero.id);
 
     if (!heroCurrent) {
       this.toast.create('This name cannot be changed!');
       return;
     }
 
-    if (heroCurrent.nickname === hero.nickname) {
+    if (heroCurrent.nickname === this.hero.nickname) {
       this.toast.create('You have not made any changes!');
       return;
     }
 
-    heroCurrent.nickname = hero.nickname; // only first found item is changed;
+    heroCurrent.nickname = this.hero.nickname; // only first found item is changed;
     this.heroService.onHeroesChanged();
     this.toast.create('Your changes have been saved!');
   }

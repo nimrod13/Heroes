@@ -597,7 +597,7 @@ class HeroService {
     /** PUT: update the hero on the server */
     updateHero(hero, index) {
         const url = `${this.dbUrlBase}/heroes/${index}.json`;
-        return this.http.put(url, hero, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(_ => this.log(`updated hero id=${hero.id} and index=${index}`)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('updateHero')));
+        return this.http.put(url, hero, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(_ => this.log(`updating hero id=${hero.id} and index=${index}`)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('updateHero')));
     }
     addHero(hero) {
         const url = `${this.dbUrlBase}/heroes/${this.maxHeroesIndex + 1}.json`;
