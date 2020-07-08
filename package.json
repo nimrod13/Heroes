@@ -12,7 +12,7 @@
     "serve:ssr": "node dist/heroes/server/main.js",
     "build:ssr": "ng build --prod && ng run heroes:server:production",
     "prerender": "ng run heroes:prerender",
-    "heroku-postbuild": "ng build --aot --prod"
+    "postinstall": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
